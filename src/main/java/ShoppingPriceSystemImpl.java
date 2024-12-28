@@ -183,12 +183,10 @@ public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
                 "ORDER BY price ASC";// 获取平台所有商品的价格信息
         Connection conn;
         try {
-            /*
             boolean success = searchProducts(productName, platformName);
             if(!success){
                 return new ApiResult(false, "商品API过期，请联系学生本人");
             }
-            */
             conn = connector.getConn();
             PreparedStatement pstmt_check = conn.prepareStatement(sql);
             pstmt_check.setString(1, productName);
@@ -213,6 +211,8 @@ public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
         } catch (SQLException e) {// 异常处理
             e.printStackTrace();
             return new ApiResult(false, "查询商品信息时发生错误：" + e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -323,11 +323,11 @@ public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
     @Override
     public void updatePricesWithAlert() throws InterruptedException, SQLException {
         while (true) {
-            //updatePrices();
+            updatePrices();
             checkAlert();
             storePrices();
-            // 每2min更新一次
-            Thread.sleep(120000);
+            // 每10min更新一次
+            Thread.sleep(600000);
         }
     }
 
@@ -505,7 +505,7 @@ public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
 
     @Override
     public ApiResult getPriceHistory(String productId) throws SQLException {
-        String selectQuery = "SELECT time, price FROM product_history_price WHERE product_id = ? ORDER BY time DESC";  // 查询某个商品的历史价格
+        String selectQuery = "SELECT time, price FROM product_history_price WHERE product_id = ? ORDER BY time ASC";  // 查询某个商品的历史价格
         Connection conn = null;
         try {
             conn = connector.getConn();
