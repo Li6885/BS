@@ -1,0 +1,13 @@
+首先,进入shoppingmanagementsystem
+1.运行后端
+  cd src/main/java
+  Ctrl+F5运行Main
+2.运行前端
+  cd frontend
+  npm install
+  npm run dev
+
+PS: 获取商品信息是通过申请API实现的
+    若您检查该程序时，发现无法获取到商品信息，可能是因为API申请过期
+    请您发送邮件至3220105251@zju.edu.cn或钉钉联系我
+    我再向官方申请
