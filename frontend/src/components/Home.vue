@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { ElMessage } from 'element-plus';
+import {ElLoading, ElMessage} from 'element-plus';
 import axios from 'axios';
 
 export default {
@@ -109,6 +109,11 @@ export default {
         return;
       }
       this.productList = []
+      let loadingInstance = ElLoading.service({
+        lock: true,
+        text: '加载中...',
+        background: 'rgba(0, 0, 0, 0.7)',
+      });
       // 发起查询请求
       axios.post('/search', this.searchForm)
         .then(response => {
@@ -128,6 +133,9 @@ export default {
           ElMessage.error(error.response.data.message);
           localStorage.setItem("products", JSON.stringify(this.productList));
           localStorage.setItem("searchForm", JSON.stringify(this.searchForm));
+        })
+        .finally(() =>{
+          loadingInstance.close();
         });
     },
     // 清空查询条件
@@ -156,6 +164,7 @@ export default {
           ElMessage.error(error.response.data.message);
         });
     },
+
     // 查询历史价格
     goToPriceHistory(productId, productName, platform, price, specification, image) {
       // 传递商品信息并跳转到历史价格页面
