@@ -25,7 +25,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.PrintWriter;
 import java.net.URLConnection;
 
 public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
@@ -331,7 +330,7 @@ public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
         }
     }
 
-    private  void updatePrices() {
+    private void updatePrices() {
         String updateCollect = "SELECT DISTINCT product_name, platform_name FROM product";
         Connection conn;
         try {
@@ -349,14 +348,16 @@ public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
     }
 
     private boolean searchProducts(String productName, String platformName) throws IOException {
-        String platformUrl = "";
+        String url = "";
+        String JDurl = "https://api-gw.onebound.cn/jd/item_search/?key=t5165806885&" + productName +
+                "&start_price=0&end_price=0&page=1&cat=0&discount_only=&sort=&seller_info=no&nick=&seller_info=&nick=&ppath=&imgid=&filter=&&lang=zh-CN&secret=6885a440";
+        String TBurl = "https://api-gw.onebound.cn/taobao/item_search/?key=t5165806885&secret=6885a440&q=" +productName +
+                "&start_price=0&end_price=0&page=1&cat=0&discount_only=&sort=&page_size=&seller_info=&nick=&ppath=&imgid=&filter=";
         if(Objects.equals(platformName, "淘宝")){
-            platformUrl = "taobao";
+            url = TBurl;
         }else if(Objects.equals(platformName, "京东")){
-            platformUrl = "jd";
+            url = JDurl;
         }
-        String url = "https://api-gw.onebound.cn/" + platformUrl + "/item_search/?key=t5165806885&secret=6885a440&q=" + productName
-                + "&start_price=0&end_price=0&page=1&cat=0&discount_only=&page_size=&nick=&ppath=&imgid=&filter=";
         JSONObject json = getRequestFromUrl(url);
         String error = json.getString("error");
         if(Objects.equals(error, "")) {
@@ -463,8 +464,7 @@ public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
         }
     }
 
-    @Override
-    public void storePrices() throws SQLException {
+    private void storePrices() throws SQLException {
         String selectQuery = "SELECT product_id, price FROM product";  // 从商品表中选择商品ID和价格
         String insertCheck = "SELECT price FROM product_history_price WHERE product_id = ? ORDER BY time DESC LIMIT 1";
         String insertQuery = "INSERT INTO product_history_price (time, product_id, price) VALUES (NOW(), ?, ?)";  // 向历史价格表插入数据

@@ -100,11 +100,6 @@ public interface ShoppingPriceSystem {
     void checkAlert();
 
     /**
-     * 自动存储历史价格
-     */
-    void storePrices() throws SQLException;
-
-    /**
      * 重置数据库
      */
     ApiResult resetDatabase();

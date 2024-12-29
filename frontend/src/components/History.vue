@@ -19,12 +19,12 @@
             </template>
           </el-table-column>
         </el-table>
-        <h3 class="title">历史价格折线图</h3>
+        <h3 class="title" v-if="priceHistory.length > 0">历史价格折线图</h3>
         <div>
           <div ref="chart" style="width: 100%; height: 400%"></div>
         </div>
         <div style="display: block">
-          <h3 class="title">历史价格清单</h3>
+          <h3 class="title" v-if="priceHistory.length > 0">历史价格清单</h3>
         </div>
         <el-table :data="priceHistory" style="width: 100%" v-if="priceHistory.length > 0">
           <el-table-column label="时间" prop="time" align="center"></el-table-column>
