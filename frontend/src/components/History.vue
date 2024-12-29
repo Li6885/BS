@@ -6,8 +6,7 @@
         <el-button type="text" @click="goBack" style="margin-bottom: 20px;">返回</el-button>
 
         <el-table :data="[product]" style="width: 100%">
-          <el-table-column label="商品名" prop="productName" align="center"></el-table-column>
-          <el-table-column label="在售电商平台" prop="platform" align="center"></el-table-column>
+          <el-table-column label="在售平台" prop="platform" align="center"></el-table-column>
           <el-table-column label="当前价格" prop="price" align="center">
             <template v-slot="scope">
               <strong>{{ scope.row.price }} 元</strong>
@@ -65,7 +64,7 @@ export default {
           text: '历史价格趋势',
           left: 'center',
           textStyle: {
-            fontSize: 30, // 主标题字体大小
+            fontSize: 20, // 主标题字体大小
             fontWeight: 'bold' // 字体加粗
           },
         },
@@ -76,6 +75,11 @@ export default {
             let time = params.name;  // 获取横坐标时间
             let price = params.data;  // 获取纵坐标价格
             return `时间: ${time}<br>价格: ${price} 元`; // 格式化显示时间和价格
+          },
+          textStyle: {
+            fontSize: 14,  // 设置字体大小
+            color: '#333', // 设置字体颜色
+            fontWeight: 'normal' // 设置字体粗细（可选）
           },
           axisPointer: {
             type: 'cross',  // 鼠标悬停时显示的指示器样式，可以是 'line', 'shadow' 或 'cross'
@@ -88,6 +92,10 @@ export default {
           type: 'category',
           data: [],  // 动态填充时间数据
           name: '时间',
+          nameTextStyle: {
+            fontSize: 10,  // 缩小字体大小
+            color: '#333',
+          },
           axisLabel: {
             fontSize: 10,
             color: '#333',
@@ -96,6 +104,10 @@ export default {
         yAxis: {
           type: 'value',
           name: '价格/元',
+          nameTextStyle: {
+            fontSize: 10,  // 缩小字体大小
+            color: '#333',
+          },
         },
         series: [{
           name: '历史价格',
@@ -162,8 +174,10 @@ export default {
 
 <style scoped>
 /* 主要布局 */
+/* 主要布局 */
 .container {
   display: flex;
+  flex-direction: column; /* 在手机端使用竖向布局 */
   height: 100%;
   background-color: #fafafa;
   width: 100%;
@@ -177,6 +191,7 @@ export default {
   border-radius: 8px;
   margin-left: 20px;
   min-height: 80vh;
+  width: 100%;
 }
 
 /* 商品信息 */
@@ -192,23 +207,26 @@ export default {
 }
 
 .product-image {
-  width: 150px;
+  width: 100%;  /* 使用百分比宽度以适应屏幕 */
+  max-width: 150px;  /* 限制最大宽度 */
   height: auto;
   border-radius: 5px;
   margin-top: 10px;
 }
 
-/* 返回按钮 */
-.el-button {
-  margin-bottom: 20px;
-}
+/* 响应式设计：在手机端调整页面大小 */
+@media (max-width: 768px) {
+  .content-area {
+    padding: 10px;  /* 减小内边距 */
+  }
 
-/* 历史价格表格 */
-.el-table {
-  margin-top: 20px;
-}
+  .product-info .title {
+    font-size: 1.5em; /* 在小屏幕上缩小标题字体 */
+  }
 
-.el-table-column {
-  text-align: center;
+  .product-image {
+    width: 100%; /* 限制商品图片的最大宽度 */
+    max-width: 120px;  /* 限制最大宽度 */
+  }
 }
 </style>

@@ -1,7 +1,8 @@
 <template>
   <el-scrollbar height="100%" style="width: 100%; height: 100%;">
     <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
-      <el-card style="width: 400px; padding: 30px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);">
+      <!-- 使用媒体查询调整 el-card 宽度和内边距 -->
+      <el-card class="register-card">
         <h3 style="text-align: center; font-size: 2em; margin-bottom: 20px; font-weight: bold;">用户注册</h3>
 
         <el-form :model="registerForm" ref="registerForm" label-width="80px">
@@ -168,5 +169,26 @@ export default {
 </script>
 
 <style scoped>
-/* 注册页面样式 */
+/* 默认 el-card 样式 */
+.register-card {
+  width: 400px;
+  padding: 30px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 响应式设计：当屏幕宽度小于 768px 时，调整卡片的宽度和内边距 */
+@media (max-width: 768px) {
+  .register-card {
+    width: 90%;    /* 宽度设为 90% 以适应小屏幕 */
+    padding: 10px; /* 减小内边距 */
+  }
+}
+
+/* 响应式设计：当屏幕宽度小于 480px 时，进一步调整卡片宽度 */
+@media (max-width: 480px) {
+  .register-card {
+    width: 100%;   /* 更改宽度为 100% 以适应更小屏幕 */
+    padding: 5px; /* 更小的内边距 */
+  }
+}
 </style>

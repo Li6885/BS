@@ -15,7 +15,7 @@ app.config.globalProperties.$echarts = echarts;
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
-axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.baseURL = 'http://192.168.169.223:8000'; //修改此处
 app.use(createPinia())
 app.use(router)
 app.use(ElementPlus)
