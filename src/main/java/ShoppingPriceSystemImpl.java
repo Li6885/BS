@@ -338,11 +338,10 @@ public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
     @Override
     public void updatePricesWithAlert() throws InterruptedException, SQLException {
         while (true) {
-            // 每1h更新一次
-            updatePrices();
+            //updatePrices();//自动更新所有商品价格，开销过大，建议注释，或把sleep的时间加大到5min
             checkAlert();
             storePrices();
-            Thread.sleep(3600000);
+            Thread.sleep(2000);//5min: 300000
         }
     }
 
