@@ -227,7 +227,7 @@ public class Main {
             if (platformsArray != null ) {// 如果选择了平台，将平台值加入到列表
                 if(platformsArray.isEmpty()) {
                     platformsArray.add("淘宝");
-                    platformsArray.add("京东");
+                    platformsArray.add("苏宁");
                 }
                 for (int i = 0; i < platformsArray.size(); i++) {
                     platforms.add(platformsArray.getString(i));
@@ -236,14 +236,21 @@ public class Main {
                 boolean init = false;
                 List<Product> products = new ArrayList<>();
                 String message = "";
-                for (String it : platforms) {
-                    ApiResult apiResult = shoppingManagementSystem.queryProductPricesByPlatform(productName, it);
+                if(platforms.size()==1) {
+                    ApiResult apiResult = shoppingManagementSystem.queryProductPricesByPlatform(productName, platforms.get(0));
                     if (apiResult != null && apiResult.ok) {
-                        if (!init) {
-                            responseJson.put("success", true);
-                            responseJson.put("message", apiResult.message);
-                            init = true;
-                        }
+                        responseJson.put("success", true);
+                        responseJson.put("message", apiResult.message);
+                        init = true;
+                        products.addAll( (List<Product>) (apiResult.payload) );
+                    }
+                    message = apiResult.message;
+                }else{
+                    ApiResult apiResult = shoppingManagementSystem.queryProductPricesByPlatform(productName, null);
+                    if (apiResult != null && apiResult.ok) {
+                        responseJson.put("success", true);
+                        responseJson.put("message", apiResult.message);
+                        init = true;
                         products.addAll( (List<Product>) (apiResult.payload) );
                     }
                     message = apiResult.message;

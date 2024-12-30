@@ -176,29 +176,45 @@ public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
     /* 搜索相关接口实现 */
     @Override
     public ApiResult queryProductPricesByPlatform(String productName, String platformName) throws SQLException {
-        String sql = "SELECT product_id, price, specification, image " +
+        String sql = "SELECT product_id, platform_name, price, specification, image " +
                 "FROM product " +
                 "WHERE product_name = ? and platform_name = ?" +
                 "ORDER BY price ASC";// 获取平台所有商品的价格信息
+        String sqlAll = "SELECT product_id, platform_name, price, specification, image " +
+                "FROM product " +
+                "WHERE product_name = ?" +
+                "ORDER BY price ASC";// 获取平台所有商品的价格信息
         Connection conn;
         try {
-            boolean success = searchProducts(productName, platformName);
-            if(!success){
-                return new ApiResult(false, "商品API过期，请联系学生本人");
-            }
             conn = connector.getConn();
-            PreparedStatement pstmt_check = conn.prepareStatement(sql);
-            pstmt_check.setString(1, productName);
-            pstmt_check.setString(2, platformName);
+            boolean success;
+            PreparedStatement pstmt_check;
+            if(platformName == null || platformName.equals("")){
+                boolean success1 = searchProducts(productName, "苏宁");
+                boolean success2 = searchProducts(productName,"淘宝");
+                success = success1 || success2;
+                pstmt_check = conn.prepareStatement(sqlAll);
+                pstmt_check.setString(1, productName);
+            }else {
+                success = searchProducts(productName, platformName);
+                pstmt_check = conn.prepareStatement(sql);
+                pstmt_check.setString(1, productName);
+                pstmt_check.setString(2, platformName);
+            }
+            if(!success){
+                return new ApiResult(false, "电商平台可能有所更新，请联系学生本人");
+            }
+
             ResultSet resultSet = pstmt_check.executeQuery();// 执行查询
             List<Product> products = new ArrayList<>();
             boolean init = false;
             while (resultSet.next()) {
+                String platform_name = resultSet.getString("platform_name");
                 String productId = resultSet.getString("product_id");
                 double lowestPrice = resultSet.getDouble("price");
                 String specification = resultSet.getString("specification");
                 String image = resultSet.getString("image");
-                Product product = new Product(productId, productName, platformName, lowestPrice, specification, image);
+                Product product = new Product(productId, productName, platform_name, lowestPrice, specification, image);
                 init = true;
                 products.add(product);
             }
@@ -322,11 +338,11 @@ public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
     @Override
     public void updatePricesWithAlert() throws InterruptedException, SQLException {
         while (true) {
+            // 每1h更新一次
             updatePrices();
             checkAlert();
             storePrices();
-            // 每10min更新一次
-            Thread.sleep(600000);
+            Thread.sleep(3600000);
         }
     }
 
@@ -348,16 +364,7 @@ public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
     }
 
     private boolean searchProducts(String productName, String platformName) throws IOException {
-        String url = "";
-        String JDurl = "https://api-gw.onebound.cn/jd/item_search/?key=t5165806885&" + productName +
-                "&start_price=0&end_price=0&page=1&cat=0&discount_only=&sort=&seller_info=no&nick=&seller_info=&nick=&ppath=&imgid=&filter=&&lang=zh-CN&secret=6885a440";
-        String TBurl = "https://api-gw.onebound.cn/taobao/item_search/?key=t5165806885&secret=6885a440&q=" +productName +
-                "&start_price=0&end_price=0&page=1&cat=0&discount_only=&sort=&page_size=&seller_info=&nick=&ppath=&imgid=&filter=";
-        if(Objects.equals(platformName, "淘宝")){
-            url = TBurl;
-        }else if(Objects.equals(platformName, "京东")){
-            url = JDurl;
-        }
+        String url = getString(productName, platformName);
         JSONObject json = getRequestFromUrl(url);
         String error = json.getString("error");
         if(Objects.equals(error, "")) {
@@ -378,6 +385,20 @@ public class ShoppingPriceSystemImpl implements ShoppingPriceSystem {
         }else{
             return false;
         }
+    }
+
+    private static String getString(String productName, String platformName) {
+        String url = "";
+        String SNurl = "https://api-gw.onebound.cn/suning/item_search/?key=t5165806885&q=" + productName +
+                "&start_price=&end_price=&page=&cat=&discount_only=&sort=&page_size=&seller_info=&nick=&ppath=&&lang=zh-CN&secret=6885a440";
+        String TBurl = "https://api-gw.onebound.cn/taobao/item_search/?key=t5165806885&secret=6885a440&q=" + productName +
+                "&start_price=0&end_price=0&page=1&cat=0&discount_only=&sort=&page_size=&seller_info=&nick=&ppath=&imgid=&filter=";
+        if(Objects.equals(platformName, "淘宝")){
+            url = TBurl;
+        }else if(Objects.equals(platformName, "苏宁")){
+            url = SNurl;
+        }
+        return url;
     }
 
     private void updateProduct(List<Product> products) {

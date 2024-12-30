@@ -18,7 +18,7 @@
           <!-- 平台选择 -->
           <el-form-item label="平台">
             <el-checkbox-group v-model="searchForm.platforms" class="checkbox-group">
-              <el-checkbox label="京东">京东</el-checkbox>
+              <el-checkbox label="苏宁">苏宁</el-checkbox>
               <el-checkbox label="淘宝">淘宝</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
