@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         //启动数据库连接
         shoppingManagementSystem = startDatabase();
-        HttpServer server = HttpServer.create(new InetSocketAddress("192.168.169.223",8000), 0);
+        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);//请修改此处
         // 添加handler
         server.createContext("/login", new LoginHandler());
         server.createContext("/register", new RegisterHandler());

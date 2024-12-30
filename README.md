@@ -2,9 +2,13 @@
 
 ## 项目概述
 该项目是一个商品比价网站，包含前端和后端部分。
-- **后端**：使用 Java 编写，运行在 `src/main/java` 目录。
+- **后端**：使用 Java 编写，运行在 `src` 目录。
 - **前端**：使用 Vue.js 编写，运行在 `frontend` 目录。
 - **数据库**：使用 MySQL 中的数据库`shopping`。
+
+目前代码直接运行，网站运行在`localhost`上面。
+
+如果想要通过网址访问(或实现手机端访问)，请按照运行步骤中`Ipv4部署`做出相应的修改。
 
 ## 运行步骤
 ### 0. 初始化数据库
@@ -30,6 +34,15 @@
 
 
 ### 1. 运行后端
+#### 修改监听网址
+① 如果使用Ipv4部署,请把`hostname`修改为您的Ipv4地址。
+
+<img alt="img_2.png" height="60" src="img_2.png" width="800"/>
+
+② 如果选择`localhost`部署，请这样配置。
+
+<img alt="img_3.png" height="60" src="img_3.png" width="500"/>
+
 在 IntelliJ IDEA 中按下`Ctrl`+`F5`或`运行'Main'`运行后端 
 ### 2. 运行前端
 #### 1. 修改前端网址
@@ -48,7 +61,7 @@
     只能在运行前后端的电脑通过"localhost:5173"访问该网站。
 
 #### 2. 修改后端接受网址
-同样地，修改后端接受网址(手机Ipv4或者localhost)，使其和[1. 修改前端网址](#1-修改前端网址)相同。
+同样地，在`frontend/src/main.js`中修改后端接受网址(手机Ipv4或者localhost)，使其和[1. 修改前端网址](#1-修改前端网址)相同。
 
 <img alt="img_1.png" height=100 src="img_1.png" width=500/>
 

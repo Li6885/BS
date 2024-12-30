@@ -1,8 +1,9 @@
 USE shopping;
 -- 插入示例用户
 INSERT INTO shoppingUser (username, password, email) VALUES
-        ('lilefan', '123456a', '3220105251@zju.edu.cn'), -- 请改为您的邮箱号,
+        ('lilefan', '123456a', 'lilefan20040202@outlook.com'), -- 请改为您的邮箱号,
         ('liqiang', '111111a', '3460697936@qq.com');     -- 当然可以通过注册账户方式实现
+
 -- 插入示例商品数据
 INSERT INTO product (product_id, product_name, platform_name, price, specification, image) VALUES
         ('756775095301', '女装', '淘宝', 50.00, '高腰百搭羊羔绒阔腿裤冬季保暖',
@@ -16,4 +17,4 @@ INSERT INTO product_history_price (time, product_id, price) VALUES
 
 -- 插入降价提醒数据
 INSERT INTO price_drop_alert (product_id, email, price) VALUES
-        ('756775095301', '3220105251@zju.edu.cn', 60.00); -- 请改为您的邮箱号
+        ('756775095301', 'lilefan20040202@outlook.com', 60.00); -- 请改为您的邮箱号
