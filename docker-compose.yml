@@ -1,0 +1,33 @@
+services:
+  vue:
+    build: ./frontend   # Vue 项目在 frontend 文件夹中
+    container_name: vue-app
+    restart: always
+
+    ports:
+      - "5173:5173"
+  springboot:
+    build: ./src
+    restart: always
+    container_name: springboot-app
+    ports:
+      - "8000:8000"
+  mysql:
+    image: mysql:8.0.22
+    # 容器名册
+    container_name: mysql
+    environment:
+      #密码设置
+      - MYSQL_ROOT_PASSWORD=123456
+      - TZ=Asia/Shanghai
+      - SET_CONTAINER_TIMEZONE=true
+      - CONTAINER_TIMEZONE=Asia/Shanghai
+    volumes:
+      # 前面宿主机目录，后面容器内目录(宿主机没有的目录会自动创建)
+      - ./mysql-8.0/conf:/etc/mysql/conf.d # conf.d
+      - ./mysql-8.0/data:/var/lib/mysql
+      - ./mysql-8.0/logs:/var/log/mysql
+    ports:
+      # 前面宿主机目录，后面容器内目录
+      - 3307:3306
+    restart: always

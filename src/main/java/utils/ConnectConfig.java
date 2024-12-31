@@ -17,6 +17,7 @@ public final class ConnectConfig {
     private final DatabaseType type;
 
     public ConnectConfig() throws FileNotFoundException, NullPointerException, ClassNotFoundException {
+        /*
         URL res = ConnectConfig.class.getClassLoader().getResource("application.yaml");
         if (res == null) {
             throw new NullPointerException();
@@ -25,12 +26,20 @@ public final class ConnectConfig {
         Yaml yaml = new Yaml();
         Map<String, Object> objectMap = yaml.load(br);
         /* initialize all configures */
+        /*
         host = (String)objectMap.getOrDefault("host", "localhost");
         port = (String)objectMap.getOrDefault("port", "3306");
         user = (String)objectMap.getOrDefault("user", "root");
         password = (String)objectMap.getOrDefault("password", "123456");
         db = (String)objectMap.getOrDefault("db", "shopping");
         type = DatabaseType.instance((String)objectMap.getOrDefault("type", "mysql"));
+         */
+        host = "mysql";
+        port = "3306";
+        user = "root";
+        password = "123456";
+        db = "shopping";
+        type = DatabaseType.instance("mysql");
         /* load database connect driver */
         Class.forName(type.getDriverName());
     }

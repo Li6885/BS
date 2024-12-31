@@ -18,7 +18,7 @@ public class DatabaseConnector {
             return false;
         }
         try {
-            String url = conf.getType().url(conf.getHost(), conf.getPort(), conf.getDB());
+            String url = conf.getType().url(conf.getHost(), conf.getPort(), conf.getDB())+"?allowPublicKeyRetrieval=true&useSSL=false";
             conn = DriverManager.getConnection(url, conf.getUser(), conf.getPassword());
             if (conn != null) {
                 /* Note: you need to connect & release trx explicitly */
